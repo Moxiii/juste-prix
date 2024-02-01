@@ -1,0 +1,65 @@
+<div class="container">
+  <div *ngIf="!playersEntered" class="mt-5">
+    <h2>Entrez les noms des joueurs :</h2>
+    <div class="form-group">
+      <label for="joueur1">Joueur 1:</label>
+      <input type="text" class="form-control" id="joueur1" [(ngModel)]="joueur1">
+    </div>
+    <div class="form-group">
+      <label for="joueur2">Joueur 2:</label>
+      <input type="text" class="form-control" id="joueur2" [(ngModel)]="joueur2">
+    </div>
+    <button class="btn btn-primary" (click)="enterPlayers()">Valider les noms</button>
+  </div>
+
+  <!-- Deuxième partie: Entrée de l'objet à deviner -->
+  <div *ngIf="playersEntered && !gameStarted" class="mt-5">
+    <h2>Entrez l'objet à deviner :</h2>
+    <div class="form-group">
+      <label for="objet">Nom de l'objet:</label>
+      <input type="text" class="form-control" id="objet" [(ngModel)]="objet">
+    </div>
+    <div class="form-group">
+      <label for="valeur">Valeur à trouver:</label>
+      <input type="number" class="form-control" id="valeur" [(ngModel)]="valeur">
+    </div>
+    <button class="btn btn-primary" (click)="startGame()" [disabled]="!objet || !valeur">Commencer le jeu</button>
+  </div>
+
+  <!-- Affichage du jeu en cours -->
+  <div *ngIf="gameStarted && !gameFinished" class="mt-5">
+    <h2>{{ objet }}</h2>
+    <p class="lead">Joueur actuel : {{ currentPlayer }}</p>
+    <div class="form-group">
+      <label for="guess">Devinez la valeur:</label>
+      <input type="number" class="form-control" id="guess" [(ngModel)]="guess">
+    </div>
+    <button class="btn btn-primary" (click)="playGuess()">Envoyer la valeur</button>
+    <p *ngIf="showGuessResult">{{ resultText }}</p>
+
+  </div>
+
+  <div *ngIf="gameFinished" class="mt-5">
+    <h2>Tableau des scores</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Joueur</th>
+        <th>objet</th>
+        <th>valeur</th>
+        <th>tentatives</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let score of scores">
+        <td>{{ score.joueur }}</td>
+        <td>{{ score.objet }}</td>
+        <td>{{ score.valeur }}</td>
+        <td>{{ score.tentatives }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-success" (click)="restartGame()">Recommencer le jeu</button>
+    <button class="btn btn-warning" (click)="restartGameWithSamePlayers()">Recommencer avec les mêmes joueurs</button>
+  </div>
+</div>
